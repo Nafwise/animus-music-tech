@@ -1,6 +1,6 @@
 # Animus Music Tech - the website
 
-Live at **https://nafwise.github.io/**. Every push to `main` publishes the site.
+Live at **https://nafwise.github.io/animus-music-tech/**. Every push to `main` publishes the site.
 
 It has these pages:
 
@@ -39,7 +39,7 @@ The site is plain HTML, CSS and JavaScript. It has no build step and no framewor
 python tools/serve.py
 ```
 
-Open http://127.0.0.1:8765. Only this computer can see it, and Ctrl+C stops it. Use the server: the download buttons and the controller capture don't work when a page is opened straight from the folder.
+Open http://127.0.0.1:8765/animus-music-tech/, the same path as the live site (http://127.0.0.1:8765 forwards there). Only this computer can see it, and Ctrl+C stops it. Use the server: the download buttons and the controller capture don't work when a page is opened straight from the folder.
 
 ## Test it
 
@@ -75,9 +75,10 @@ The site follows the stricter German rules, because some of the people intereste
 
 ## Publishing
 
-The site is published by GitHub Pages from the `main` branch, folder `/`, of `Nafwise/nafwise.github.io`. Push to `main`, and it's live a minute or two later.
+The site is published by GitHub Pages from the `main` branch, folder `/`, of `Nafwise/animus-music-tech`. Push to `main`, and it's live a minute or two later.
 
-- **Your own domain:** add it under Settings > Pages > Custom domain. `404.html`'s `<base href="/">` stays as it is.
+- **The path:** this is a project site, so it lives under `/animus-music-tech/`, the repository's name. Every page uses relative links, so they don't care. The exceptions are `404.html`'s `<base href="/animus-music-tech/">` and `BASE` in `tools/serve.py`: if the repository is renamed, change both.
+- **Your own domain:** add it under Settings > Pages > Custom domain. Then the site is at the domain's root, so set `404.html`'s base to `"/"` and `BASE` in `serve.py` to `"/"`.
 - **`.nojekyll`** tells GitHub to serve the files exactly as they are.
 - **https:** GitHub Pages serves over https, which the controller capture needs, because browsers only allow Web MIDI on secure pages.
 
@@ -85,7 +86,7 @@ The site is published by GitHub Pages from the `main` branch, folder `/`, of `Na
 
 - **Logo:** every page's header has `<span class="mark-ring" aria-hidden="true"></span>`, the gradient ring. Replace it with `<img class="mark-img" src="assets/img/logo.svg" alt="">` (a note in `site.css` marks the spot). The browser tab's icon is `assets/img/favicon.svg`.
 - **Banner:** the landing page's hero has a comment marking the spot, above `<div class="spectrum" ...>` (the moving bars). Replace that element with `<img class="banner-img" src="assets/img/banner.png" alt="Animus Music Tech">`. The `banner-img` style is already in `site.css`.
-- **Link previews:** add `<meta property="og:image" content="https://nafwise.github.io/assets/img/banner.png">` to each page's head. Links shared on Instagram, Discord and similar apps then show the banner. `index.html` and `pro.html` already have `og:title` and `og:description`.
+- **Link previews:** add `<meta property="og:image" content="https://nafwise.github.io/animus-music-tech/assets/img/banner.png">` to each page's head. Links shared on Instagram, Discord and similar apps then show the banner. `index.html` and `pro.html` already have `og:title` and `og:description`.
 - **Colours:** the palette is the variables at the top of `site.css` (`--purple`, `--fuchsia`, `--cyan` and the rest). Change them there and the whole site follows.
 
 ## Fonts
