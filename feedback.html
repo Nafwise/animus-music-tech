@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback &amp; testing | Animus Music Tech</title>
+<meta name="description" content="Tell Animus Music Tech what works, what breaks and what you'd love next - and sign up to test Animus Engine Pro, Mastering and the DAW.">
+<meta name="theme-color" content="#07070d">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Animus Music Tech - home">
+      <span class="mark-ring" aria-hidden="true"></span>
+      <span class="brand-words">ANIMUS<small>MUSIC TECH</small></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="pro.html">Engine Pro</a>
+      <a href="mastering.html">Mastering</a>
+      <a href="daw.html">DAW</a>
+      <a href="feedback.html" aria-current="page">Feedback &amp; testing</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" style="padding-bottom: 40px">
+    <div class="wrap">
+      <p class="eyebrow">Feedback &amp; testing</p>
+      <h1 style="font-size: clamp(30px, 5vw, 52px)">Tell me <span class="grad-text">everything</span></h1>
+      <p class="lead">What works, what breaks, what you'd love next - and whether you'd like to test. Every answer is read by the person
+        who writes the code. Only the questions you want to answer: skip the rest.</p>
+      <div class="notice good" id="sent" hidden>Thank you - it's on its way. If you left an email address, I'll reply there.</div>
+      <div class="notice" id="not-connected" hidden>The feedback form isn't switched on yet. You can still fill it in and save your
+        answers as a file - it'll be connected very soon.</div>
+    </div>
+  </section>
+
+  <section style="padding-top: 0">
+    <div class="wrap">
+      <form id="feedback" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+        <!-- For the form relay (FormSubmit): the subject, a readable table, where to come back to, and a trap for bots. -->
+        <input type="hidden" name="_subject" value="Animus feedback">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" id="next-url" value="">
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <textarea name="controller_capture" id="capture-field" hidden></textarea>
+        <input type="file" name="capture_file" id="capture-file" hidden>
+        <input type="hidden" name="used_for" id="used-for">
+        <input type="hidden" name="test_apps" id="test-apps">
+
+        <div class="group">
+          <h2>About you</h2>
+          <p>All optional. Leave an email address if you'd like a reply or want to test.</p>
+          <div class="fields">
+            <div class="field"><label for="f-name">Name or handle</label><input type="text" id="f-name" name="name" autocomplete="nickname"></div>
+            <div class="field"><label for="f-email">Email <span class="hint">- for replies only</span></label>
+              <input type="email" id="f-email" name="email" autocomplete="email"></div>
+            <div class="field"><label for="f-heard">How did you find Animus?</label>
+              <select id="f-heard" name="found_via">
+                <option value="">-</option><option>Instagram</option><option>Twitch</option><option>A friend</option>
+                <option>GitHub</option><option>Search</option><option>Somewhere else</option>
+              </select></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h2>Your setup</h2>
+          <p>So a problem can be pinned down. "Don't know" is a fine answer.</p>
+          <div class="field wide" style="margin-top: 12px">
+            <span class="label">Which app is this about?</span>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="app" value="Engine Pro" checked><span>Engine Pro</span></label>
+              <label class="choice"><input type="radio" name="app" value="Music Mastering"><span>Music Mastering</span></label>
+              <label class="choice"><input type="radio" name="app" value="DAW"><span>DAW</span></label>
+              <label class="choice"><input type="radio" name="app" value="None yet - just want to test"><span>None yet - I just want to test</span></label>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="field"><label for="f-version">Version <span class="hint">- Settings &gt; UPDATES shows it</span></label>
+              <input type="text" id="f-version" name="version" placeholder="e.g. V0.2.016"></div>
+            <div class="field"><label for="f-windows">Windows</label>
+              <select id="f-windows" name="windows"><option value="">-</option><option>Windows 11</option><option>Windows 10</option><option>Something else</option></select></div>
+            <div class="field"><label for="f-cpu">Processor</label><input type="text" id="f-cpu" name="cpu" placeholder="e.g. Intel i5-11400"></div>
+            <div class="field"><label for="f-ram">Memory</label><input type="text" id="f-ram" name="ram" placeholder="e.g. 16 GB"></div>
+            <div class="field"><label for="f-gpu">Graphics card</label><input type="text" id="f-gpu" name="gpu" placeholder="e.g. NVIDIA RTX 3060"></div>
+            <div class="field"><label for="f-audio">Audio interface / speakers</label><input type="text" id="f-audio" name="audio" placeholder="e.g. the controller's own, or a Focusrite"></div>
+          </div>
+        </div>
+
+        <div class="group" id="controller">
+          <h2>Your controller</h2>
+          <p>This is where testers help most - every controller added starts with someone like you.</p>
+          <div class="fields">
+            <div class="field wide"><label for="f-controller">Controller(s) <span class="hint">- make and model</span></label>
+              <input type="text" id="f-controller" name="controller" placeholder="e.g. Numark NS4FX, Pioneer DDJ-400"></div>
+          </div>
+          <div class="field wide" style="margin-top: 16px">
+            <span class="label">Did it work when Animus started?</span>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="controller_worked" value="Yes, fully"><span>Yes, fully</span></label>
+              <label class="choice"><input type="radio" name="controller_worked" value="Partly"><span>Partly</span></label>
+              <label class="choice"><input type="radio" name="controller_worked" value="No"><span>No</span></label>
+              <label class="choice"><input type="radio" name="controller_worked" value="No controller"><span>I don't use one</span></label>
+            </div>
+          </div>
+          <div class="field wide" style="margin-top: 16px">
+            <span class="label">Would you send MIDI and SysEx data from it, to help support it?</span>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="send_midi" value="Yes"><span>Yes</span></label>
+              <label class="choice"><input type="radio" name="send_midi" value="Maybe - ask me"><span>Maybe - ask me</span></label>
+              <label class="choice"><input type="radio" name="send_midi" value="No"><span>No</span></label>
+            </div>
+          </div>
+          <div class="notice" id="capture-none" style="margin-top: 16px">Controller not working? <a href="capture.html">Capture it in your browser</a>
+            - it takes a few minutes and comes straight back here, attached.</div>
+          <div class="notice good" id="capture-attached" hidden style="margin-top: 16px">
+            <span id="capture-summary"></span>
+            <button class="btn ghost" type="button" id="capture-remove" style="margin-left: 8px; padding: 6px 12px">Remove</button>
+          </div>
+          <div class="field wide" style="margin-top: 16px">
+            <label for="f-files">A file <span class="hint">- a capture (.json), a rekordbox MIDI export (.csv), a Serato mapping (.xml),
+              a screenshot, or Animus's log (%LOCALAPPDATA%\AnimusPro\animus.log). More than one? Put them in a .zip.</span></label>
+            <input type="file" id="f-files" name="attachment" accept=".json,.csv,.xml,.txt,.log,.png,.jpg,.jpeg,.gif,.webp,.zip">
+          </div>
+        </div>
+
+        <div class="group">
+          <h2>How's it going?</h2>
+          <p>1 is "needs a lot of work", 5 is "spot on".</p>
+          <div class="rating" style="margin-top: 12px" id="ratings"></div>
+          <div class="field wide" style="margin-top: 18px">
+            <span class="label">What do you use it for?</span>
+            <div class="choices">
+              <label class="choice"><input type="checkbox" data-multi="used_for" value="Practice"><span>Practice</span></label>
+              <label class="choice"><input type="checkbox" data-multi="used_for" value="Gigs"><span>Gigs</span></label>
+              <label class="choice"><input type="checkbox" data-multi="used_for" value="Streaming"><span>Streaming</span></label>
+              <label class="choice"><input type="checkbox" data-multi="used_for" value="Recording mixes"><span>Recording mixes</span></label>
+              <label class="choice"><input type="checkbox" data-multi="used_for" value="Just exploring"><span>Just exploring</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h2>Tell me everything</h2>
+          <div class="fields">
+            <div class="field wide"><label for="f-good">What works well?</label><textarea id="f-good" name="works_well"></textarea></div>
+            <div class="field wide"><label for="f-bad">What went wrong? <span class="hint">- what you did, what happened, what you expected</span></label>
+              <textarea id="f-bad" name="went_wrong"></textarea></div>
+            <div class="field wide"><label for="f-next">What would you love next?</label><textarea id="f-next" name="wishlist"></textarea></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h2>Testing</h2>
+          <p>Testers get new versions first and help decide what's built next.</p>
+          <label class="check" style="margin-top: 12px"><input type="checkbox" name="wants_to_test" value="Yes" id="f-test">
+            <span>I'd like to be a tester</span></label>
+          <div class="choices" style="margin: 12px 0 0 28px">
+            <label class="choice"><input type="checkbox" data-multi="test_apps" value="Engine Pro"><span>Engine Pro</span></label>
+            <label class="choice"><input type="checkbox" data-multi="test_apps" value="Music Mastering"><span>Music Mastering</span></label>
+            <label class="choice"><input type="checkbox" data-multi="test_apps" value="DAW"><span>DAW</span></label>
+          </div>
+          <label class="check" style="margin-top: 14px"><input type="checkbox" name="ok_to_email" value="Yes" id="f-consent">
+            <span>You may email me about testing (I can say stop at any time)</span></label>
+        </div>
+
+        <div class="group">
+          <h2>Your data</h2>
+          <p style="margin-bottom: 0">What you send here is emailed to Animus Music Tech through <a href="https://formsubmit.co/">FormSubmit</a>,
+            a form-to-email service, which may keep a copy for up to 30 days (<a href="https://formsubmit.co/privacy.pdf">its privacy
+            policy</a>). Its "I'm not a robot" check is Google reCAPTCHA. What you send is used only to improve Animus and - if you
+            ask - to talk to you about testing. It's never sold or passed on to anyone else. Ask for it to be deleted at any time, by
+            replying to any email or on this page.</p>
+        </div>
+
+        <div class="actions" style="align-items: center">
+          <button class="btn primary" type="submit" id="submit">Send it</button>
+          <button class="btn" type="button" id="save-answers" hidden>Save my answers as a file</button>
+          <span class="status" id="form-status"></span>
+        </div>
+        <p class="muted small" id="send-note" style="margin-top: 12px">After you press Send, FormSubmit may ask you to tick "I'm not a
+          robot", then it brings you back here.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      &copy; 2025&ndash;<span data-year>2026</span> Nafwise &middot; Animus Music Tech. All rights reserved.<br>
+      Animus Engine Pro is free to download - no subscription, no account.
+      <div class="socials" style="margin-top:14px">
+        <a href="https://www.instagram.com/nafwise.labs" rel="me noopener" aria-label="Instagram: @nafwise.labs">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>
+          Instagram</a>
+        <a href="https://www.twitch.tv/dj_nafi" rel="me noopener" aria-label="Twitch: dj_nafi">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.3 3 3 6.3v13.1h4.5V22h2.6l2.5-2.6h3.7L21 14.6V3H4.3Zm15 10.8-2.9 2.9h-4.6l-2.5 2.5v-2.5H5.4V4.8h13.9v9Z"/><path fill="currentColor" d="M15.8 7.8h-1.7v4.9h1.7V7.8Zm-4.7 0H9.4v4.9h1.7V7.8Z"/></svg>
+          Twitch</a>
+      </div>
+    </div>
+    <nav aria-label="Footer">
+      <a href="pro.html">Engine Pro</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="capture.html">Controller capture</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/releases">Releases</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/NOTICE.md">Notice</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/THIRD-PARTY-NOTICES.txt">Third-party notices</a>
+    </nav>
+  </div>
+</footer>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/feedback.js"></script>
+</body>
+</html>

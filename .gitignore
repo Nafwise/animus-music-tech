@@ -1,0 +1,9 @@
+# Test submissions saved by tools/serve.py --echo - never published
+tests/out/
+
+# Editors and Windows
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.bak

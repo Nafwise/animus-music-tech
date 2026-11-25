@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animus Engine Pro - a four-deck DJ engine, fully unlocked | Animus Music Tech</title>
+<meta name="description" content="Animus Engine Pro: four decks, stems separated on your own PC, clean FX, a platter with real momentum and controller support built against the Numark NS4FX. Free for Windows - no subscription, no account.">
+<meta name="theme-color" content="#07070d">
+<meta property="og:title" content="Animus Engine Pro">
+<meta property="og:description" content="A four-deck DJ engine, fully unlocked. Free for Windows.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Animus Music Tech - home">
+      <span class="mark-ring" aria-hidden="true"></span>
+      <span class="brand-words">ANIMUS<small>MUSIC TECH</small></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="pro.html" aria-current="page">Engine Pro</a>
+      <a href="mastering.html">Mastering</a>
+      <a href="daw.html">DAW</a>
+      <a href="feedback.html">Feedback &amp; testing</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <span class="pill live">Available now &middot; Windows</span>
+      <h1>Animus <span class="grad-text">Engine Pro</span></h1>
+      <p class="lead">A four-deck DJ engine, fully unlocked. Stems separated on your own PC, FX that go in and out clean, a platter with
+        real momentum, and controller support built against the Numark NS4FX. Free to download - no subscription, no account.</p>
+      <div class="download" id="download">
+        <!-- The link is the releases page until site.js finds the newest installer on GitHub (then: its direct download). -->
+        <a class="btn primary" data-download href="https://github.com/Nafwise/Animus-Releases/releases">
+          <span data-download-label>Download for Windows</span> <small data-download-size></small>
+        </a>
+        <a class="btn ghost" href="#requirements">What you'll need</a>
+      </div>
+      <p class="release-meta" data-release-meta>From GitHub Releases &middot; installs for you alone, no admin rights needed</p>
+      <div class="spectrum" data-bars="56" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section id="decks">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The decks</p>
+        <h2>Built to feel like hardware</h2>
+        <p class="lead">Native C++ from the audio engine to the interface - no web page in a window - so it stays tight under load.</p>
+      </div>
+      <div class="grid three">
+        <div class="card"><div class="icon" aria-hidden="true">4</div><h3>Four decks, two sides</h3>
+          <p class="muted">A layer switch per side, so a two-channel controller drives all four. Play, cue, sync, key-locked tempo, slip,
+            vinyl mode, hot cues and loops on every deck.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">&#8635;</div><h3>A platter with real momentum</h3>
+          <p class="muted">A modelled motor spins up and down, so backspins, stalls and hand-brakes behave like vinyl. Scratching runs on
+            the audio thread and holds up under load.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">CDJ</div><h3>CDJ mode</h3>
+          <p class="muted">With scratch off, the jog bends the pitch for as long as it turns and a hand on top never stops the music.
+            Tempo Sync keeps a synced deck's tempo while you nudge the beat.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">1234</div><h3>Grids on the drums</h3>
+          <p class="muted">Every analysed track gets a beat grid placed on the kicks, numbered 1&nbsp;2&nbsp;3&nbsp;4 on the waveform.
+            Nudge it from the keyboard; the nudge is saved with the track.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">BPM</div><h3>Readable numbers</h3>
+          <p class="muted">Whole BPMs as they play, the key, and waveforms that stretch with the tempo - two decks at the same BPM draw
+            their beats the same distance apart.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">&#9835;</div><h3>Now Playing</h3>
+          <p class="muted">The track the room is hearing - artwork, title, artist, BPM, key and its spectrum - big enough to read on a
+            stream or in a video, and steady through a blend.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stems">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Stems in the box</p>
+        <h2>Bass, vocals, drums - on three faders</h2>
+        <p class="lead">Demucs and a GPU-ready PyTorch come with the app: tracks are split into four stems on your own PC, using an
+          NVIDIA graphics card when there is one. Nothing is uploaded.</p>
+        <ul class="list muted">
+          <li>The three EQ faders drive the stems instead of filters: low is the bass, mid the vocals, high the drums.</li>
+          <li>Stems are finished before they're saved - they add back up to the track, and the bass keeps all of its low end, so
+            cutting it takes the whole bassline.</li>
+          <li>The Night Shift can work through your library in the background, making <em>Best</em> stems from two separators.</li>
+          <li>Rather not split anything? Switch the mixer to EQ in Settings.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>The smart fader</h3>
+        <p class="muted">The crossfader steers the basslines too, so two tracks' bass never stack - and a deck faded out leaves an echo
+          behind it.</p>
+        <h3 style="margin-top:20px">Harvest a sample</h3>
+        <p class="muted">Pull a sample straight out of a stem into one of the sampler's banks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="fx">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">FX and pads</p>
+        <h2>Effects that go in and out clean</h2>
+        <p class="lead">No clicks, no holes, no jumps in level when an effect comes in or goes out - and echoes and reverbs ring on and
+          die away by themselves.</p>
+      </div>
+      <div class="grid three">
+        <div class="card"><h3>Six paddle FX</h3>
+          <p class="muted">HPF, LPF, flanger, phaser, echo and reverb on the paddles, on the beat - the filter knob is the cutoff, the
+            reverb a real convolution room.</p></div>
+        <div class="card"><h3>Ten pad FX</h3>
+          <p class="muted">Echo, dub echo, space echo, reverb, flanger, phaser, filter sweep, crush, auto filter and master tempo - held
+            on the pads. A panic button ends every tail at once.</p></div>
+        <div class="card"><h3>Eight pad modes</h3>
+          <p class="muted">Hot cues, auto loops, rolls, a slicer, the sampler, fader cuts, pitch play and scratch banks. Rolls and the
+            slicer slip: let go and the track is where it would have been.</p></div>
+        <div class="card"><h3>Colour FX</h3>
+          <p class="muted">One colour FX knob per channel, the effect stepped from the controller, with its own kill.</p></div>
+        <div class="card"><h3>Sampler</h3>
+          <p class="muted">Five banks - vocals, horns, bass, drums and deck FX - remembered from one launch to the next.</p></div>
+        <div class="card"><h3>Auto DJ and Auto Blend</h3>
+          <p class="muted">Let it mix for you, or hand it one blend at a time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="controllers">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Controllers and audio</p>
+        <h2>Your gear, your way</h2>
+        <ul class="list muted">
+          <li><b>Built against the Numark NS4FX</b> - its screens, its lights in Serato's layout, its Shift layer and its assign
+            switches.</li>
+          <li><b>Launchpad</b> support, with per-deck pad quadrants.</li>
+          <li><b>Any MIDI controller</b>: a mapper with 61 actions in 10 categories, learned from a touch of the control.</li>
+          <li><b>Controller detection</b>: the app asks a controller who it is the moment it's plugged in.</li>
+          <li><b>Headphones on any output</b> - even a different device from the speakers, kept in time with them.</li>
+          <li><b>A mic input</b> that ducks the music, and knows when it's only hearing the app's own output coming back.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Controller not recognised?</h3>
+        <p class="muted">Help add it: the controller capture page records what it sends - right in your browser - and attaches the
+          file to your feedback.</p>
+        <div class="actions" style="margin-top:16px"><a class="btn" href="capture.html">Capture my controller</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div class="grid three">
+        <div class="card"><h3>Your library, left where it is</h3>
+          <p class="muted">Scans your Music folder in place and never writes to it; folders become crates. Duplicate detection,
+            silence trimming and sample-kit slicing built in.</p></div>
+        <div class="card"><h3>Reggie, a local assistant</h3>
+          <p class="muted">An optional language model that runs on your PC, talks over the decks and can drive them. Downloaded only if
+            you ask for it.</p></div>
+        <div class="card"><h3>A tablet remote</h3>
+          <p class="muted">Open the remote in a tablet's browser on your own network and drive the decks from it.</p></div>
+        <div class="card"><h3>Updates itself</h3>
+          <p class="muted">A box tells you when a new version is out; it downloads in the background and installs when you close the
+            app. Every update is signed and checked before anything is installed.</p></div>
+        <div class="card"><h3>Offline when it counts</h3>
+          <p class="muted">No account and no network needed to play a set.</p></div>
+        <div class="card"><h3>Fully unlocked</h3>
+          <p class="muted">There is no "Pro" upgrade inside the app. This is it - every feature, for everyone.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="requirements">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">What you'll need</p>
+        <h2>System requirements</h2>
+        <ul class="list muted">
+          <li>Windows 10 or 11, 64-bit.</li>
+          <li>About 5 GB of disk space (a 2 GB download) - most of it is the stem separator.</li>
+          <li>An NVIDIA graphics card makes stem separation much faster; without one it runs on the processor.</li>
+          <li>A DJ controller is optional: keyboard and mouse work too.</li>
+          <li>The internet only for updates, the stem model's first download, and the assistant if you want it.</li>
+        </ul>
+      </div>
+      <div>
+        <details>
+          <summary>Is it really free?</summary>
+          <p>Yes. No subscription, no account, no trial, nothing locked. Download it and use all of it.</p>
+        </details>
+        <details>
+          <summary>Windows warns me about the installer</summary>
+          <p>The installer isn't signed with a paid code-signing certificate yet, so SmartScreen may say it's from an unknown
+            publisher. Choose <b>More info</b>, then <b>Run anyway</b>. It installs for you alone, without admin rights.</p>
+        </details>
+        <details>
+          <summary>Why is the download 2 GB?</summary>
+          <p>Stem separation runs on your own PC, so the app carries PyTorch, Demucs and NVIDIA's GPU libraries with it. Updates after
+            that only download what changed.</p>
+        </details>
+        <details>
+          <summary>It won't start</summary>
+          <p>Install Microsoft's Visual C++ Redistributable (x64) and try again - most PCs have it already. If it still won't, please
+            tell me on the <a href="feedback.html">feedback page</a>.</p>
+        </details>
+        <details>
+          <summary>Where are my library and settings kept?</summary>
+          <p>Apart from the app, in your own profile, so updating or reinstalling never touches them.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h2>Help shape Engine Pro</h2>
+          <p>Found a bug, missing a feature, or using a controller it doesn't know yet? Tell me - testers decide what comes next.</p>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="feedback.html">Send feedback</a>
+          <a class="btn" href="capture.html">Capture my controller</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      &copy; 2025&ndash;<span data-year>2026</span> Nafwise &middot; Animus Music Tech. All rights reserved.<br>
+      Animus Engine Pro is free to download - no subscription, no account.
+      <div class="socials" style="margin-top:14px">
+        <a href="https://www.instagram.com/nafwise.labs" rel="me noopener" aria-label="Instagram: @nafwise.labs">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>
+          Instagram</a>
+        <a href="https://www.twitch.tv/dj_nafi" rel="me noopener" aria-label="Twitch: dj_nafi">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.3 3 3 6.3v13.1h4.5V22h2.6l2.5-2.6h3.7L21 14.6V3H4.3Zm15 10.8-2.9 2.9h-4.6l-2.5 2.5v-2.5H5.4V4.8h13.9v9Z"/><path fill="currentColor" d="M15.8 7.8h-1.7v4.9h1.7V7.8Zm-4.7 0H9.4v4.9h1.7V7.8Z"/></svg>
+          Twitch</a>
+      </div>
+    </div>
+    <nav aria-label="Footer">
+      <a href="pro.html">Engine Pro</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="capture.html">Controller capture</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/releases">Releases</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/NOTICE.md">Notice</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/THIRD-PARTY-NOTICES.txt">Third-party notices</a>
+    </nav>
+  </div>
+</footer>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>
