@@ -30,15 +30,36 @@
     }
   });
 
-  // ---- the download buttons: the newest release that carries an installer ------------------------------------------
+  // ---- from GitHub's releases: the download buttons and the Legends count -----------------------------------------------
   // Asked of GitHub's public API - GitHub hosts this site too, so no one new learns of the visit. Nothing is kept in the
   // browser (storing anything there that isn't strictly needed would need consent under German law). If GitHub can't be
-  // reached, the buttons keep their link to the releases page, which always works.
+  // reached, the buttons keep their link to the releases page, which always works, and the Legends count stays hidden.
+  // What's read from the releases is AnimusReleases' (releases.js).
   var buttons = document.querySelectorAll("[data-download]");
   var metas = document.querySelectorAll("[data-release-meta]");
-  if (!buttons.length && !metas.length) return;
+  var legendBoxes = document.querySelectorAll("[data-legends]");
+  var R = window.AnimusReleases;
+  if (!R || (!buttons.length && !metas.length && !legendBoxes.length)) return;
 
-  var repo = (window.ANIMUS && window.ANIMUS.releasesRepo) || "Nafwise/Animus-Releases";
+  var settings = window.ANIMUS || {};
+  var repo = settings.releasesRepo || "Nafwise/Animus-Releases";
+
+  function showLegends(n) {
+    var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    legendBoxes.forEach(function (box) {
+      var num = box.querySelector("[data-legends-count]"), label = box.querySelector("[data-legends-label]");
+      label.textContent = n === 0 ? "legends so far - be the first!"
+                        : n === 1 ? "legend who's downloaded Engine Pro" : "legends who've downloaded Engine Pro";
+      box.hidden = false;
+      if (calm || n < 2) { num.textContent = n.toLocaleString("en-GB"); return; }
+      var t0 = performance.now();                                      // count up to it, quickly
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / 900);
+        num.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))).toLocaleString("en-GB");
+        if (k < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
 
   function show(found) {
     if (!found) return;
@@ -61,22 +82,12 @@
     });
   }
 
-  fetch("https://api.github.com/repos/" + repo + "/releases?per_page=30", { headers: { Accept: "application/vnd.github+json" } })
-    .then(function (r) { return r.ok ? r.json() : []; })
+  // Every release (up to 100 - years away), so the Legends count includes every installer.
+  fetch("https://api.github.com/repos/" + repo + "/releases?per_page=100", { headers: { Accept: "application/vnd.github+json" } })
+    .then(function (r) { if (!r.ok) throw new Error("GitHub said " + r.status); return r.json(); })
     .then(function (releases) {
-      var found = null;
-      for (var i = 0; i < releases.length && !found; i++) {
-        var rel = releases[i];
-        if (rel.draft) continue;
-        (rel.assets || []).forEach(function (a) {
-          var m = /^AnimusPro-Setup-(\d+)\.(\d+)\.(\d+)\.exe$/.exec(a.name);
-          if (m && !found) {
-            found = { url: a.browser_download_url, size: a.size, version: "V" + m[1] + "." + m[2] + "." + m[3],
-                      published: rel.published_at, page: rel.html_url };
-          }
-        });
-      }
-      show(found);
+      show(R.newestInstaller(releases));
+      if (legendBoxes.length) showLegends(R.legends(releases, settings.legends));
     })
-    .catch(function () { /* offline or rate-limited: the static link stands */ });
+    .catch(function () { /* offline or rate-limited: the static link stands, the count stays hidden */ });
 })();

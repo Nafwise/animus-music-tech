@@ -26,8 +26,9 @@ The site is plain HTML, CSS and JavaScript. It has no build step and no framewor
 | `404.html` | What GitHub Pages shows for a missing page |
 | `assets/css/site.css` | All the styling. The colours are the variables at the top, in `:root`; the fonts are declared above them |
 | `assets/fonts/` | Inter and Orbitron, served from the site, with their licences (SIL Open Font License) |
-| `assets/js/config.js` | The one setting: the releases repository |
-| `assets/js/site.js` | Used on every page: the menu, the year, the spectrum bars and the download buttons |
+| `assets/js/config.js` | The settings: the releases repository, and the Legends count's starting point |
+| `assets/js/site.js` | Used on every page: the menu, the year, the spectrum bars, the download buttons and the Legends count |
+| `assets/js/releases.js` | What's read from the GitHub releases: the newest installer, and the Legends count |
 | `assets/js/feedback-mail.js`, `assets/js/feedback.js` | The feedback email (`feedback-mail.js`), and the page around it (`feedback.js`) |
 | `assets/js/midi.js`, `assets/js/capture.js` | The controller capture: `midi.js` is the MIDI logic, `capture.js` is the page around it |
 | `tools/serve.py` | A preview server, for this computer only |
@@ -46,7 +47,19 @@ Open http://127.0.0.1:8765/animus-music-tech/, the same path as the live site (h
 ```
 node tests/midi_test.js
 node tests/feedback_test.js
+node tests/releases_test.js
 ```
+
+## The Legends count
+
+The home page shows how many people have downloaded Animus Engine Pro: the "legends". It adds up GitHub's download counts for every installer (`AnimusPro-Setup-*.exe`) in the releases. App updates download other files, so they never count.
+
+The starting point is `legends` in `config.js`:
+
+- **`notCounted`** is the developer's own test downloads from before the count started on 25 November 2026 (1), so it began at 0. To leave out another test download of your own, add 1.
+- **`carried`** keeps the count right when an old installer is deleted. GitHub forgets a file's downloads when it's deleted, so add the installer's download count here first. `gh api repos/Nafwise/Animus-Releases/releases` shows the counts.
+
+If GitHub can't be reached, the count stays hidden rather than showing a wrong number.
 
 ## How feedback reaches you
 
