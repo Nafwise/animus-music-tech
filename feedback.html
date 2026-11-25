@@ -7,9 +7,7 @@
 <meta name="description" content="Tell Animus Music Tech what works, what breaks and what you'd love next - and sign up to test Animus Engine Pro, Mastering and the DAW.">
 <meta name="theme-color" content="#07070d">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
@@ -37,34 +35,20 @@
     <div class="wrap">
       <p class="eyebrow">Feedback &amp; testing</p>
       <h1 style="font-size: clamp(30px, 5vw, 52px)">Tell me <span class="grad-text">everything</span></h1>
-      <p class="lead">What works, what breaks, what you'd love next - and whether you'd like to test. Every answer is read by the person
-        who writes the code. Only the questions you want to answer: skip the rest.</p>
-      <div class="notice good" id="sent" hidden>Thank you - it's on its way. If you left an email address, I'll reply there.</div>
-      <div class="notice" id="not-connected" hidden>The feedback form isn't switched on yet. You can still fill it in and save your
-        answers as a file - it'll be connected very soon.</div>
+      <p class="lead">What works, what breaks, what you'd love next - and whether you'd like to test. Answer only what you want to; at
+        the end it all goes into an email from your own email app, read by the person who writes the code.</p>
     </div>
   </section>
 
   <section style="padding-top: 0">
     <div class="wrap">
-      <form id="feedback" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
-        <!-- For the form relay (FormSubmit): the subject, a readable table, where to come back to, and a trap for bots. -->
-        <input type="hidden" name="_subject" value="Animus feedback">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" id="next-url" value="">
-        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <textarea name="controller_capture" id="capture-field" hidden></textarea>
-        <input type="file" name="capture_file" id="capture-file" hidden>
-        <input type="hidden" name="used_for" id="used-for">
-        <input type="hidden" name="test_apps" id="test-apps">
-
+      <!-- Nothing is posted anywhere: the button at the end opens an email in the visitor's own email app (feedback.js). -->
+      <form id="feedback">
         <div class="group">
           <h2>About you</h2>
-          <p>All optional. Leave an email address if you'd like a reply or want to test.</p>
+          <p>All optional. There's no email box: a reply goes to the address you send from.</p>
           <div class="fields">
-            <div class="field"><label for="f-name">Name or handle</label><input type="text" id="f-name" name="name" autocomplete="nickname"></div>
-            <div class="field"><label for="f-email">Email <span class="hint">- for replies only</span></label>
-              <input type="email" id="f-email" name="email" autocomplete="email"></div>
+            <div class="field"><label for="f-name">Name or handle</label><input type="text" id="f-name" name="name" autocomplete="nickname" maxlength="100"></div>
             <div class="field"><label for="f-heard">How did you find Animus?</label>
               <select id="f-heard" name="found_via">
                 <option value="">-</option><option>Instagram</option><option>Twitch</option><option>A friend</option>
@@ -127,11 +111,8 @@
             <span id="capture-summary"></span>
             <button class="btn ghost" type="button" id="capture-remove" style="margin-left: 8px; padding: 6px 12px">Remove</button>
           </div>
-          <div class="field wide" style="margin-top: 16px">
-            <label for="f-files">A file <span class="hint">- a capture (.json), a rekordbox MIDI export (.csv), a Serato mapping (.xml),
-              a screenshot, or Animus's log (%LOCALAPPDATA%\AnimusPro\animus.log). More than one? Put them in a .zip.</span></label>
-            <input type="file" id="f-files" name="attachment" accept=".json,.csv,.xml,.txt,.log,.png,.jpg,.jpeg,.gif,.webp,.zip">
-          </div>
+          <p class="muted small" style="margin: 16px 0 0">Got a file that would help - a rekordbox MIDI export (.csv), a Serato mapping (.xml),
+            a screenshot, or Animus's log (%LOCALAPPDATA%\AnimusPro\animus.log)? Attach it to the email at the end.</p>
         </div>
 
         <div class="group">
@@ -175,21 +156,27 @@
         </div>
 
         <div class="group">
-          <h2>Your data</h2>
-          <p style="margin-bottom: 0">What you send here is emailed to Animus Music Tech through <a href="https://formsubmit.co/">FormSubmit</a>,
-            a form-to-email service, which may keep a copy for up to 30 days (<a href="https://formsubmit.co/privacy.pdf">its privacy
-            policy</a>). Its "I'm not a robot" check is Google reCAPTCHA. What you send is used only to improve Animus and - if you
-            ask - to talk to you about testing. It's never sold or passed on to anyone else. Ask for it to be deleted at any time, by
-            replying to any email or on this page.</p>
+          <h2>Sending it</h2>
+          <p style="margin-bottom: 0">The button opens an email to <a id="feedback-address" href="mailto:animusmusictech@gmail.com">animusmusictech@gmail.com</a>
+            in your own email app, with your answers written in. You see it before it goes, and nothing is sent from this page. If
+            there's a controller capture, or your answers are long, it also saves one file with everything for you to attach. What you
+            send is used only to improve Animus and, if you ask, to talk to you about testing. It's never sold or passed on, and you
+            can ask for it to be deleted at any time. More in the <a href="privacy.html">privacy policy</a>.</p>
         </div>
 
         <div class="actions" style="align-items: center">
-          <button class="btn primary" type="submit" id="submit">Send it</button>
-          <button class="btn" type="button" id="save-answers" hidden>Save my answers as a file</button>
+          <button class="btn primary" type="button" id="send">Email my feedback</button>
           <span class="status" id="form-status"></span>
         </div>
-        <p class="muted small" id="send-note" style="margin-top: 12px">After you press Send, FormSubmit may ask you to tick "I'm not a
-          robot", then it brings you back here.</p>
+        <div class="notice good" id="after-send" hidden style="margin-top: 16px">
+          <p id="after-text" style="margin: 0 0 10px"></p>
+          <p class="small muted" style="margin: 0 0 12px">Nothing opened? Email <a href="mailto:animusmusictech@gmail.com">animusmusictech@gmail.com</a>
+            yourself: copy your answers and paste them in.</p>
+          <div class="actions">
+            <button class="btn" type="button" id="copy-answers">Copy my answers</button>
+            <a class="btn ghost" id="open-again" href="mailto:animusmusictech@gmail.com">Open the email again</a>
+          </div>
+        </div>
       </form>
     </div>
   </section>
@@ -214,13 +201,16 @@
       <a href="feedback.html">Feedback</a>
       <a href="capture.html">Controller capture</a>
       <a href="https://github.com/Nafwise/Animus-Releases/releases">Releases</a>
-      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/NOTICE.md">Notice</a>
+      <a href="https://github.com/Nafwise/Animus-Releases/blob/main/NOTICE.md">Software notice</a>
       <a href="https://github.com/Nafwise/Animus-Releases/blob/main/THIRD-PARTY-NOTICES.txt">Third-party notices</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="legal.html">Legal notice (Impressum)</a>
     </nav>
   </div>
 </footer>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/site.js"></script>
+<script src="assets/js/feedback-mail.js"></script>
 <script src="assets/js/feedback.js"></script>
 </body>
 </html>

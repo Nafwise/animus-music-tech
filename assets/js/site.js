@@ -31,14 +31,14 @@
   });
 
   // ---- the download buttons: the newest release that carries an installer ------------------------------------------
-  // GitHub's public API, asked once an hour at most (kept in sessionStorage). If it cannot be reached the buttons keep their
-  // link to the releases page, which always works.
+  // Asked of GitHub's public API - GitHub hosts this site too, so no one new learns of the visit. Nothing is kept in the
+  // browser (storing anything there that isn't strictly needed would need consent under German law). If GitHub can't be
+  // reached, the buttons keep their link to the releases page, which always works.
   var buttons = document.querySelectorAll("[data-download]");
   var metas = document.querySelectorAll("[data-release-meta]");
   if (!buttons.length && !metas.length) return;
 
   var repo = (window.ANIMUS && window.ANIMUS.releasesRepo) || "Nafwise/Animus-Releases";
-  var key = "animus-installer:" + repo;
 
   function show(found) {
     if (!found) return;
@@ -61,11 +61,6 @@
     });
   }
 
-  try {
-    var cached = JSON.parse(sessionStorage.getItem(key) || "null");
-    if (cached && Date.now() - cached.at < 3600 * 1000) { show(cached.found); return; }
-  } catch (e) { /* no storage: just ask */ }
-
   fetch("https://api.github.com/repos/" + repo + "/releases?per_page=30", { headers: { Accept: "application/vnd.github+json" } })
     .then(function (r) { return r.ok ? r.json() : []; })
     .then(function (releases) {
@@ -81,7 +76,6 @@
           }
         });
       }
-      try { sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), found: found })); } catch (e) { /* fine */ }
       show(found);
     })
     .catch(function () { /* offline or rate-limited: the static link stands */ });

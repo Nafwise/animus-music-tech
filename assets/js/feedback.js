@@ -1,14 +1,15 @@
 /* ==========================================================================
-   The feedback form: sent through the relay set in config.js (FormSubmit), with a controller capture carried over from the capture
-   page. Until the relay is set the form still works - the answers can be saved as a file.
+   The feedback page: its ratings, a controller capture carried over from the capture page, and the email itself - written by
+   AnimusFeedback (feedback-mail.js) and opened in the visitor's own email app, so nothing is sent from the page.
    ========================================================================== */
 (function () {
   "use strict";
+  var F = window.AnimusFeedback;
   function $(id) { return document.getElementById(id); }
 
-  var form = $("feedback"), status = $("form-status"), submit = $("submit"), saveBtn = $("save-answers");
-  var action = (window.ANIMUS && window.ANIMUS.feedbackAction) || "";
-  var MAX_FILES = 9.5 * 1024 * 1024;           // FormSubmit takes 10 MB of files in all, per message
+  var form = $("feedback"), status = $("form-status"), after = $("after-send");
+  var address = $("feedback-address").getAttribute("href").replace(/^mailto:/, "");
+  var lastFull = "";
 
   // ---- the ratings: four questions, 1 to 5 ------------------------------------------------------------------------
   var ratings = $("ratings");
@@ -33,13 +34,7 @@
     ratings.appendChild(choices);
   });
 
-  // ---- back from the relay: thank you ------------------------------------------------------------------------------
-  if (/[?&]sent=1\b/.test(location.search)) {
-    $("sent").hidden = false;
-    try { sessionStorage.removeItem("animus-capture"); } catch (e) { /* fine */ }
-  }
-
-  // ---- a capture from the capture page ------------------------------------------------------------------------------
+  // ---- a capture from the capture page (kept in this tab's session storage until the tab closes or it's removed) -----
   var capture = null;
   try { capture = JSON.parse(sessionStorage.getItem("animus-capture") || "null"); } catch (e) { capture = null; }
 
@@ -50,8 +45,9 @@
     if (!has) return;
     var c = capture.controller || {};
     var name = (c.input && c.input.name) || "your controller";
-    $("capture-summary").textContent = "Controller capture attached: " + name + " - " + (capture.controls || []).length + " controls, " +
-      (capture.events || []).length + " messages" + (c.answeredInquiry ? ", and it said who it is." : ".");
+    $("capture-summary").textContent = "Controller capture attached: " + name + " - " + F.count((capture.controls || []).length, "control") +
+      ", " + F.count((capture.events || []).length, "message") + (c.answeredInquiry ? ", and it said who it is." : ".") +
+      " It goes in the file you attach to your email.";
   }
   showCapture();
   $("capture-remove").addEventListener("click", function () {
@@ -60,105 +56,63 @@
     showCapture();
   });
 
-  function captureName() {
-    var id = (capture.suggestedProfile && capture.suggestedProfile.id) || "controller";
-    return "animus-capture-" + id + "-" + String(capture.captured || "").slice(0, 10) + ".json";
-  }
+  // ---- the email ----------------------------------------------------------------------------------------------------
+  form.addEventListener("submit", function (e) { e.preventDefault(); });      // nothing to submit to: the button emails
 
-  // The capture goes as a .json attachment - the same file the capture page saves. True when it's attached.
-  function attachCapture() {
-    var box = $("capture-file");
-    try {
-      var dt = new DataTransfer();
-      if (capture) dt.items.add(new File([JSON.stringify(capture, null, 1)], captureName(), { type: "application/json" }));
-      box.files = dt.files;
-      return !!capture && box.files.length === 1;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  // The email's own text gets the summary: who the controller is and every control it sent. The raw messages are in the
-  // attachment - or, if it couldn't be made, the first 1,500 of them are here instead.
-  function captureText(attached) {
-    if (!capture) return "";
-    var copy = JSON.parse(JSON.stringify(capture));
-    var n = (copy.events || []).length;
-    if (attached) { delete copy.events; copy.eventsNote = "All " + n + " messages are in the attached " + captureName(); }
-    else if (n > 1500) { copy.events = copy.events.slice(0, 1500); copy.truncated = true; }
-    return JSON.stringify(copy);
-  }
-
-  function joinMulti(group, target) {
-    var picked = [];
-    form.querySelectorAll('input[data-multi="' + group + '"]').forEach(function (b) { if (b.checked) picked.push(b.value); });
-    $(target).value = picked.join(", ");
-  }
-
-  function prepare() {
-    joinMulti("used_for", "used-for");
-    joinMulti("test_apps", "test-apps");
-    $("capture-field").value = captureText(attachCapture());
-    $("next-url").value = location.href.split("#")[0].split("?")[0] + "?sent=1";
-  }
-
-  // ---- not connected yet: save the answers instead ------------------------------------------------------------------
-  if (!action) {
-    $("not-connected").hidden = false;
-    $("send-note").hidden = true;
-    // Hidden isn't enough: Enter in a text box still "clicks" the form's first submit button and would post it to nowhere.
-    submit.hidden = true;
-    submit.disabled = true;
-    form.addEventListener("submit", function (e) { e.preventDefault(); });
-    saveBtn.hidden = false;
-    saveBtn.addEventListener("click", function () {
-      prepare();
-      var answers = {};
-      new FormData(form).forEach(function (v, k) {
-        if (k.charAt(0) === "_" || k === "controller_capture" || v instanceof File) return;
-        if (v !== "") answers[k] = v;
-      });
-      if (capture) answers.controller_capture = capture;
-      var blob = new Blob([JSON.stringify(answers, null, 1)], { type: "application/json" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "animus-feedback-" + new Date().toISOString().slice(0, 10) + ".json";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-      var own = $("f-files").files[0];
-      status.textContent = own ? "Saved. " + own.name + " isn't inside it - keep the two together." : "Saved. Thank you!";
-      status.className = "status ok";
+  function answers() {
+    var out = {}, multi = {};
+    new FormData(form).forEach(function (v, k) { if (typeof v === "string" && v.trim()) out[k] = v.trim(); });
+    form.querySelectorAll("input[data-multi]:checked").forEach(function (b) {
+      var k = b.getAttribute("data-multi");
+      (multi[k] = multi[k] || []).push(b.value);
     });
-    return;
+    Object.keys(multi).forEach(function (k) { out[k] = multi[k].join(", "); });
+    return out;
   }
 
-  form.action = action;
+  function follow(href, download) {                // a link, clicked - the way both the file and the email are opened
+    var a = document.createElement("a");
+    a.href = href;
+    if (download) a.download = download;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
 
-  form.addEventListener("submit", function (e) {
-    var email = $("f-email").value.trim();
-    if (($("f-test").checked || $("f-consent").checked) && !email) {
-      e.preventDefault();
-      status.textContent = "Leave an email address so I can reach you about testing.";
-      status.className = "status bad";
-      $("f-email").focus();
-      return;
+  $("send").addEventListener("click", function () {
+    var a = answers();
+    var fileName = "animus-feedback-" + new Date().toISOString().slice(0, 10) + ".json";
+    var mail = F.compose(a, { capture: capture, address: address, fileName: fileName });
+    lastFull = mail.full;
+    if (mail.needsFile) {
+      var url = URL.createObjectURL(new Blob([F.fileFor(a, capture, new Date().toISOString())], { type: "application/json" }));
+      follow(url, fileName);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
     }
-    prepare();
-    var own = $("f-files").files[0], made = $("capture-file").files[0];
-    if ((own ? own.size : 0) + (made ? made.size : 0) > MAX_FILES) {
-      e.preventDefault();
-      status.textContent = "Your file is too big to send - the limit is 10 MB in all. Zip it, or leave it out and mention it in your message.";
-      status.className = "status bad";
-      return;
-    }
-    submit.disabled = true;
-    status.textContent = "Sending...";
-    status.className = "status";
+    $("after-text").textContent = mail.needsFile
+      ? "Your email app should now be open with your answers. Attach " + fileName + " - it's just been saved to your Downloads " +
+        "folder - then press Send."
+      : "Your email app should now be open with your answers in it. Check them, then press Send.";
+    $("open-again").href = mail.url;
+    after.hidden = false;
+    status.textContent = "";
+    setTimeout(function () { follow(mail.url); }, mail.needsFile ? 500 : 0);   // let the file start saving first
   });
 
-  // Back on this page from the browser's history: the button works again.
-  window.addEventListener("pageshow", function (e) {
-    if (e.persisted) { submit.disabled = false; status.textContent = ""; status.className = "status"; }
+  $("copy-answers").addEventListener("click", function () {
+    function done() { status.textContent = "Copied - paste them into an email to " + address + "."; status.className = "status ok"; }
+    function fallback() {
+      var box = document.createElement("textarea");
+      box.value = lastFull;
+      box.setAttribute("readonly", "");
+      box.style.position = "fixed"; box.style.opacity = "0";
+      document.body.appendChild(box);
+      box.select();
+      try { document.execCommand("copy"); done(); }
+      catch (e) { status.textContent = "Couldn't copy - select your answers in the email instead."; status.className = "status bad"; }
+      box.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lastFull).then(done, fallback);
+    else fallback();
   });
 })();
