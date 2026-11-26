@@ -13,7 +13,9 @@ window.ANIMUS = {
     notCounted: 1,
     // GitHub forgets an installer's downloads when it's deleted from a release. Before deleting one, add its download count
     // here (gh api repos/Nafwise/Animus-Releases/releases), or the count drops.
-    carried: 0
+    //   1 - V0.2.016's installer (deleted 26 November 2026, when V0.2.020 became the baseline): its one download was the test
+    //       that notCounted leaves out, so the count stays where it was.
+    carried: 1
   }
 };
 // The feedback address is in the pages themselves (feedback.html, legal.html, privacy.html), not here: the feedback page reads
