@@ -47,13 +47,9 @@
         <a class="btn ghost" href="#requirements">What you'll need</a>
       </div>
       <p class="release-meta" data-release-meta>From GitHub Releases &middot; installs for you alone, no admin rights needed</p>
-      <!-- The installer's SHA-256, from GitHub's own digest of the file (site.js, releases.js). Hidden until it arrives. -->
-      <div class="fingerprint" data-fingerprint hidden>
-        <p class="release-meta"><b>Only download Animus from this page</b> or <a href="https://github.com/Nafwise/Animus-Releases/releases">its
-          GitHub releases</a>. To check a download is the real one, its SHA-256 fingerprint must be:</p>
-        <p class="release-meta"><code data-fingerprint-value></code></p>
-        <p class="release-meta">In PowerShell: <code data-fingerprint-command></code> - the Hash it prints should match.</p>
-      </div>
+      <p class="release-meta"><b>Only download Animus from this page</b> or its
+        <a href="https://github.com/Nafwise/Animus-Releases/releases">GitHub releases</a> - and
+        <a href="#verify">check it's authentic</a> before you run it.</p>
       <div class="spectrum" data-bars="56" aria-hidden="true"></div>
     </div>
   </section>
@@ -195,10 +191,10 @@
         <h2>System requirements</h2>
         <ul class="list muted">
           <li>Windows 10 or 11, 64-bit.</li>
-          <li>About 5 GB of disk space (a 2 GB download) - most of it is the stem separator.</li>
+          <li>About 4.5 GB of disk space (a 1.6 GB download) - most of it is the stem separator.</li>
           <li>An NVIDIA graphics card makes stem separation much faster; without one it runs on the processor.</li>
           <li>A DJ controller is optional: keyboard and mouse work too.</li>
-          <li>The internet only for updates, the stem model's first download, and the assistant if you want it.</li>
+          <li>The internet only for updates and the stem model's one-time download.</li>
         </ul>
       </div>
       <div>
@@ -209,10 +205,11 @@
         <details>
           <summary>Windows warns me about the installer</summary>
           <p>The installer isn't signed with a paid code-signing certificate yet, so SmartScreen may say it's from an unknown
-            publisher. Choose <b>More info</b>, then <b>Run anyway</b>. It installs for you alone, without admin rights.</p>
+            publisher. <a href="#verify">Check it's authentic</a> first, then choose <b>More info</b> and <b>Run anyway</b>. It installs
+            for you alone, without admin rights.</p>
         </details>
         <details>
-          <summary>Why is the download 2 GB?</summary>
+          <summary>Why is the download so big?</summary>
           <p>Stem separation runs on your own PC, so the app carries PyTorch, Demucs and NVIDIA's GPU libraries with it. Updates after
             that only download what changed.</p>
         </details>
@@ -225,6 +222,41 @@
           <summary>Where are my library and settings kept?</summary>
           <p>Apart from the app, in your own profile, so updating or reinstalling never touches them.</p>
         </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- The authenticity check: the visitor pastes their download's SHA-256 and site.js compares it, in the browser, with the
+       fingerprints GitHub measured of each published installer (releases.js). The fingerprints themselves are never shown. -->
+  <section id="verify">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Before you run it</p>
+        <h2>Check it's authentic</h2>
+        <p class="lead">Every real Animus installer has its own fingerprint, a SHA-256 hash that changes if even one byte of the file
+          does. Find your download's and paste it here, and this page tells you whether it's the genuine article.</p>
+      </div>
+      <div class="verify" data-verify>
+        <ol class="verify-steps">
+          <li><b>Open PowerShell:</b> press Start, type <b>PowerShell</b> and press Enter.</li>
+          <li><b>Paste this line into it and press Enter.</b> It only reads the installer and copies its fingerprint to your
+            clipboard, so it prints nothing when it works.
+            <div class="verify-cmd">
+              <code data-verify-command>(Get-FileHash "$env:USERPROFILE\Downloads\AnimusPro-Setup-0.2.020.exe").Hash | Set-Clipboard</code>
+              <button class="btn small" type="button" data-verify-copy>Copy</button>
+            </div>
+            <span class="hint">Saved it somewhere else? Right-click the installer (Shift + right-click on Windows 10), choose
+              <b>Copy as path</b>, and paste that over the part in quotes, quotes and all.</span></li>
+          <li><label for="verify-input"><b>Paste your fingerprint here</b> and press Check:</label>
+            <form class="verify-form" data-verify-form autocomplete="off">
+              <input type="text" id="verify-input" data-verify-input placeholder="64 letters and numbers" spellcheck="false"
+                     autocapitalize="off">
+              <button class="btn primary" type="submit">Check</button>
+            </form>
+            <div class="verify-result" data-verify-result role="status" aria-live="polite"></div></li>
+        </ol>
+        <p class="hint">Checked here in your browser, against the fingerprints GitHub measured of each installer when it was
+          published. What you paste is never sent anywhere or kept.</p>
       </div>
     </div>
   </section>

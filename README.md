@@ -18,7 +18,7 @@ The site is plain HTML, CSS and JavaScript. It has no build step and no framewor
 | File | What it is |
 |---|---|
 | `index.html` | The landing page: what Animus Music Tech is, the vision, equality, the apps, the founder, the socials |
-| `pro.html` | Animus Engine Pro: what it does, the download button, requirements, FAQ |
+| `pro.html` | Animus Engine Pro: what it does, the download button, requirements, FAQ, and the authenticity check (`#verify`) |
 | `mastering.html`, `daw.html` | Placeholders for Animus Music Mastering and Animus DAW, both in development |
 | `feedback.html` | The feedback and tester questionnaire. It opens an email in the visitor's own email app |
 | `capture.html` | The controller capture. It records what a controller sends (with Web MIDI) and hands it to the feedback page |
@@ -27,12 +27,12 @@ The site is plain HTML, CSS and JavaScript. It has no build step and no framewor
 | `assets/css/site.css` | All the styling. The colours are the variables at the top, in `:root`; the fonts are declared above them |
 | `assets/fonts/` | Inter and Orbitron, served from the site, with their licences (SIL Open Font License) |
 | `assets/js/config.js` | The settings: the releases repository, and the Legends count's starting point |
-| `assets/js/site.js` | Used on every page: the menu, the year, the spectrum bars, the download buttons and the Legends count |
-| `assets/js/releases.js` | What's read from the GitHub releases: the newest installer, and the Legends count |
+| `assets/js/site.js` | Used on every page: the menu, the year, the spectrum bars, the download buttons, the Legends count and the authenticity check |
+| `assets/js/releases.js` | What's read from the GitHub releases: the newest installer, the Legends count, and the fingerprints the check compares with |
 | `assets/js/feedback-mail.js`, `assets/js/feedback.js` | The feedback email (`feedback-mail.js`), and the page around it (`feedback.js`) |
 | `assets/js/midi.js`, `assets/js/capture.js` | The controller capture: `midi.js` is the MIDI logic, `capture.js` is the page around it |
 | `tools/serve.py` | A preview server, for this computer only |
-| `tests/` | Tests for `midi.js` and `feedback-mail.js` |
+| `tests/` | Tests for `midi.js`, `feedback-mail.js` and `releases.js` |
 
 ## Preview it
 
@@ -60,6 +60,14 @@ The starting point is `legends` in `config.js`:
 - **`carried`** keeps the count right when an old installer is deleted. GitHub forgets a file's downloads when it's deleted, so add the installer's download count here first. `gh api repos/Nafwise/Animus-Releases/releases` shows the counts.
 
 If GitHub can't be reached, the count stays hidden rather than showing a wrong number.
+
+## The authenticity check
+
+The Engine Pro page's "Check it's authentic" (`pro.html#verify`) tells a visitor whether their download is a real installer. PowerShell copies the file's SHA-256 fingerprint, they paste it in, and the page compares it with the fingerprints GitHub measured of every published installer (each release asset's `digest`). The fingerprints are never shown on the page, and what's pasted is never sent or kept.
+
+- **A new release needs nothing here:** GitHub measures every file uploaded, and the PowerShell line takes the newest installer's name from GitHub. The name written in `pro.html` is only what shows before GitHub answers; update it when a new full installer comes out.
+- **It never calls a file fake without GitHub's fingerprints:** until they arrive, or if GitHub can't be reached, it says it can't check and points to the releases page.
+- **A deleted installer no longer checks as authentic**, so delete one only when nobody needs it (like V0.2.016's).
 
 ## How feedback reaches you
 

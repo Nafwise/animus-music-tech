@@ -257,8 +257,26 @@ section + section { border-top: 1px solid var(--edge); }
 /* ---- the download panel (Engine Pro) ------------------------------------------------------------------------- */
 .download { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 8px; }
 .release-meta { color: var(--soft); font-size: 14px; }
-.fingerprint { margin-top: 10px; }
-.fingerprint code { word-break: break-all; font-size: 13px; }
+
+/* ---- the authenticity check (Engine Pro): paste a download's fingerprint, the page says if it's real --------------- */
+.verify { background: var(--panel); border: 1px solid var(--edge); border-radius: 20px; padding: clamp(20px, 4vw, 36px); }
+.verify-steps { margin: 0 0 18px; padding-left: 1.4em; display: grid; gap: 18px; }
+.verify-steps li::marker { color: var(--purple); font-weight: 700; }
+.verify-steps label { font-weight: 400; font-size: inherit; }
+.verify-cmd { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 10px 0 6px; }
+.verify-cmd code {
+  flex: 1 1 300px; min-width: 0; background: var(--bg-2); border: 1px solid var(--edge-2); border-radius: 10px;
+  padding: 10px 12px; font: 13px/1.5 ui-monospace, "Cascadia Code", Consolas, monospace; color: var(--ink); word-break: break-all;
+}
+.verify-form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.verify-form input { flex: 1 1 300px; min-width: 0; width: auto; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+.verify-result .notice { margin: 12px 0 0; }
+.verify-result .notice b { color: var(--ink); }
+.verify-result .notice.good b { color: var(--green); }
+.verify-result .notice.good b::before { content: "\2713\00a0"; }
+.verify-result .notice.bad b { color: var(--red); }
+.verify-result .notice.bad b::before { content: "\2717\00a0"; }
+.btn.small { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
 
 /* ---- FAQ ----------------------------------------------------------------------------------------------------- */
 details {
