@@ -257,6 +257,8 @@ section + section { border-top: 1px solid var(--edge); }
 /* ---- the download panel (Engine Pro) ------------------------------------------------------------------------- */
 .download { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 8px; }
 .release-meta { color: var(--soft); font-size: 14px; }
+.fingerprint { margin-top: 10px; }
+.fingerprint code { word-break: break-all; font-size: 13px; }
 
 /* ---- FAQ ----------------------------------------------------------------------------------------------------- */
 details {

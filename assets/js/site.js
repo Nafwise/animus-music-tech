@@ -37,9 +37,10 @@
   // What's read from the releases is AnimusReleases' (releases.js).
   var buttons = document.querySelectorAll("[data-download]");
   var metas = document.querySelectorAll("[data-release-meta]");
+  var fingerprints = document.querySelectorAll("[data-fingerprint]");
   var legendBoxes = document.querySelectorAll("[data-legends]");
   var R = window.AnimusReleases;
-  if (!R || (!buttons.length && !metas.length && !legendBoxes.length)) return;
+  if (!R || (!buttons.length && !metas.length && !legendBoxes.length && !fingerprints.length)) return;
 
   var settings = window.ANIMUS || {};
   var repo = settings.releasesRepo || "Nafwise/Animus-Releases";
@@ -79,6 +80,15 @@
       a.href = found.page;
       a.textContent = "release notes";
       m.appendChild(a);
+    });
+    // The installer's fingerprint, as GitHub measured the file: what a download should hash to, so a copy from anywhere else can be told
+    // from the real one. Shown only when GitHub gives it.
+    fingerprints.forEach(function (f) {
+      if (!found.sha256) return;
+      f.querySelector("[data-fingerprint-value]").textContent = found.sha256;
+      var cmd = f.querySelector("[data-fingerprint-command]");
+      if (cmd) cmd.textContent = 'Get-FileHash "$env:USERPROFILE\\Downloads\\' + found.name + '"';
+      f.hidden = false;
     });
   }
 

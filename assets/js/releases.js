@@ -12,7 +12,8 @@
   // updating never counts as a download here.
   var INSTALLER = /^AnimusPro-Setup-(\d+)\.(\d+)\.(\d+)\.exe$/;
 
-  // The newest release with an installer (GitHub lists the newest first): { url, size, version, published, page }, or null.
+  // The newest release with an installer (GitHub lists the newest first): { url, size, version, published, page, sha256 }, or null.
+  // sha256 is GitHub's own digest of the file ("sha256:..." in the API), 64 hex digits - or "" when GitHub gives none.
   function newestInstaller(releases) {
     for (var i = 0; i < releases.length; i++) {
       var rel = releases[i];
@@ -21,8 +22,10 @@
       for (var j = 0; j < assets.length; j++) {
         var m = INSTALLER.exec(assets[j].name);
         if (m) {
+          var digest = /^sha256:([0-9a-f]{64})$/i.exec(assets[j].digest || "");
           return { url: assets[j].browser_download_url, size: assets[j].size, version: "V" + m[1] + "." + m[2] + "." + m[3],
-                   published: rel.published_at, page: rel.html_url };
+                   published: rel.published_at, page: rel.html_url, sha256: digest ? digest[1].toLowerCase() : "",
+                   name: assets[j].name };
         }
       }
     }

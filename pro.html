@@ -47,6 +47,13 @@
         <a class="btn ghost" href="#requirements">What you'll need</a>
       </div>
       <p class="release-meta" data-release-meta>From GitHub Releases &middot; installs for you alone, no admin rights needed</p>
+      <!-- The installer's SHA-256, from GitHub's own digest of the file (site.js, releases.js). Hidden until it arrives. -->
+      <div class="fingerprint" data-fingerprint hidden>
+        <p class="release-meta"><b>Only download Animus from this page</b> or <a href="https://github.com/Nafwise/Animus-Releases/releases">its
+          GitHub releases</a>. To check a download is the real one, its SHA-256 fingerprint must be:</p>
+        <p class="release-meta"><code data-fingerprint-value></code></p>
+        <p class="release-meta">In PowerShell: <code data-fingerprint-command></code> - the Hash it prints should match.</p>
+      </div>
       <div class="spectrum" data-bars="56" aria-hidden="true"></div>
     </div>
   </section>
@@ -162,13 +169,14 @@
     <div class="wrap">
       <div class="grid three">
         <div class="card"><h3>Your library, left where it is</h3>
-          <p class="muted">Scans your Music folder in place and never writes to it; folders become crates. Duplicate detection,
-            silence trimming and sample-kit slicing built in.</p></div>
-        <div class="card"><h3>Reggie, a local assistant</h3>
-          <p class="muted">An optional language model that runs on your PC, talks over the decks and can drive them. Downloaded only if
-            you ask for it.</p></div>
-        <div class="card"><h3>A tablet remote</h3>
-          <p class="muted">Open the remote in a tablet's browser on your own network and drive the decks from it.</p></div>
+          <p class="muted">Scans your Music folder in place and never writes to it; folders become crates. Duplicate detection built
+            in, and the Night Shift separates stems for every track while you sleep.</p></div>
+        <div class="card"><h3>Slip, as it should be</h3>
+          <p class="muted">With SLIP on, hold a hot cue, ride a loop or scratch, and the track carries on underneath - let go and you
+            land exactly where it would have been, on the beat.</p></div>
+        <div class="card"><h3>Private by design</h3>
+          <p class="muted">The engine behind the decks answers only the app on your own PC: nothing on the network, and no web page,
+            can reach it. Your music never leaves your machine.</p></div>
         <div class="card"><h3>Updates itself</h3>
           <p class="muted">A box tells you when a new version is out; it downloads in the background and installs when you close the
             app. Every update is signed and checked before anything is installed.</p></div>

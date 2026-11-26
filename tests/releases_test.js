@@ -29,6 +29,14 @@ test("the newest installer, for the download buttons", function () {
   var found = R.newestInstaller(releases);
   assert.deepStrictEqual([found.version, found.url, found.page], ["V0.2.016", "https://example.test/AnimusPro-Setup-0.2.016.exe",
                                                                   "https://example.test/v0.2.016"]);
+  // The fingerprint is GitHub's own digest of the installer, lower-case, or "" when GitHub gives none.
+  var withDigest = JSON.parse(JSON.stringify(releases));
+  withDigest[0].assets[1].digest = "sha256:0E1D72BAB8A549A757A08516F30859602281C153F18A161CBF919B1FD06BBD4D";
+  assert.strictEqual(R.newestInstaller(withDigest).sha256, "0e1d72bab8a549a757a08516f30859602281c153f18a161cbf919b1fd06bbd4d");
+  assert.strictEqual(R.newestInstaller(withDigest).name, "AnimusPro-Setup-0.2.016.exe");
+  assert.strictEqual(found.sha256, "");
+  withDigest[0].assets[1].digest = "md5:abc";
+  assert.strictEqual(R.newestInstaller(withDigest).sha256, "");
 });
 
 test("an update-only release on top doesn't hide the installer below it; a draft is skipped", function () {
