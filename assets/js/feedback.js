@@ -8,8 +8,9 @@
   function $(id) { return document.getElementById(id); }
 
   var form = $("feedback"), status = $("form-status"), after = $("after-send");
+  var sendBtn = $("send"), downloadAgain = $("download-file");
   var address = $("feedback-address").getAttribute("href").replace(/^mailto:/, "");
-  var lastFull = "";
+  var lastFull = "", lastFileJson = "", lastFileName = "";
 
   // ---- the ratings: four questions, 1 to 5 ------------------------------------------------------------------------
   var ratings = $("ratings");
@@ -42,12 +43,13 @@
     var has = !!capture;
     $("capture-attached").hidden = !has;
     $("capture-none").hidden = has;
+    sendBtn.textContent = has ? "Download .json & open email" : "Email my feedback";
     if (!has) return;
     var c = capture.controller || {};
     var name = (c.input && c.input.name) || "your controller";
-    $("capture-summary").textContent = "Controller capture attached: " + name + " - " + F.count((capture.controls || []).length, "control") +
+    $("capture-summary").textContent = "Controller capture loaded: " + name + " - " + F.count((capture.controls || []).length, "control") +
       ", " + F.count((capture.events || []).length, "message") + (c.answeredInquiry ? ", and it said who it is." : ".") +
-      " It goes in the file you attach to your email.";
+      " Clicking below will save a file starting with animus-feedback to your Downloads folder for you to attach.";
   }
   showCapture();
   $("capture-remove").addEventListener("click", function () {
@@ -79,25 +81,42 @@
     a.remove();
   }
 
-  $("send").addEventListener("click", function () {
+  function triggerDownload(jsonText, fileName) {
+    var url = URL.createObjectURL(new Blob([jsonText], { type: "application/json" }));
+    follow(url, fileName);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+  }
+
+  sendBtn.addEventListener("click", function () {
     var a = answers();
-    var fileName = "animus-feedback-" + new Date().toISOString().slice(0, 10) + ".json";
+    var now = new Date().toISOString();
+    var fileName = "animus-feedback-" + now.slice(0, 10) + ".json";
     var mail = F.compose(a, { capture: capture, address: address, fileName: fileName });
     lastFull = mail.full;
     if (mail.needsFile) {
-      var url = URL.createObjectURL(new Blob([F.fileFor(a, capture, new Date().toISOString())], { type: "application/json" }));
-      follow(url, fileName);
-      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      lastFileJson = F.fileFor(a, capture, now);
+      lastFileName = fileName;
+      triggerDownload(lastFileJson, lastFileName);
+    } else {
+      lastFileJson = "";
+      lastFileName = "";
     }
+    if (downloadAgain) downloadAgain.hidden = !mail.needsFile;
     $("after-text").textContent = mail.needsFile
-      ? "Your email app should now be open with your answers. Attach " + fileName + " - it's just been saved to your Downloads " +
-        "folder - then press Send."
+      ? "Almost done! 1) " + fileName + " has been saved to your Downloads folder. " +
+        "2) In the email that just opened, remember to attach the file starting with \"animus-feedback\" before pressing Send."
       : "Your email app should now be open with your answers in it. Check them, then press Send.";
     $("open-again").href = mail.url;
     after.hidden = false;
     status.textContent = "";
-    setTimeout(function () { follow(mail.url); }, mail.needsFile ? 500 : 0);   // let the file start saving first
+    setTimeout(function () { follow(mail.url); }, mail.needsFile ? 600 : 0);   // let the file download start before mail steals focus
   });
+
+  if (downloadAgain) {
+    downloadAgain.addEventListener("click", function () {
+      if (lastFileJson && lastFileName) triggerDownload(lastFileJson, lastFileName);
+    });
+  }
 
   $("copy-answers").addEventListener("click", function () {
     function done() { status.textContent = "Copied - paste them into an email to " + address + "."; status.className = "status ok"; }
