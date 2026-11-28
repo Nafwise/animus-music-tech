@@ -106,7 +106,7 @@
             </div>
           </div>
           <div class="notice" id="capture-none" style="margin-top: 16px">Controller not working? <a href="capture.html">Capture it in your browser</a>
-            - it takes a few minutes and comes straight back here, attached.</div>
+            - it takes a few minutes and comes straight back here, ready to save with your feedback.</div>
           <div class="notice good" id="capture-attached" hidden style="margin-top: 16px">
             <span id="capture-summary"></span>
             <button class="btn ghost" type="button" id="capture-remove" style="margin-left: 8px; padding: 6px 12px">Remove</button>
@@ -159,7 +159,8 @@
           <h2>Sending it</h2>
           <p style="margin-bottom: 0">The button opens an email to <a id="feedback-address" href="mailto:animusmusictech@gmail.com">animusmusictech@gmail.com</a>
             in your own email app, with your answers written in. You see it before it goes, and nothing is sent from this page. If
-            there's a controller capture, or your answers are long, it also saves one file with everything for you to attach. What you
+            there's a controller capture, or your answers are long, it also saves a file starting with <strong>animus-feedback</strong>
+            to your <strong>Downloads</strong> folder &mdash; remember to attach it to the email before pressing Send. What you
             send is used only to improve Animus and, if you ask, to talk to you about testing. It's never sold or passed on, and you
             can ask for it to be deleted at any time. More in the <a href="privacy.html">privacy policy</a>.</p>
         </div>
@@ -171,8 +172,9 @@
         <div class="notice good" id="after-send" hidden style="margin-top: 16px">
           <p id="after-text" style="margin: 0 0 10px"></p>
           <p class="small muted" style="margin: 0 0 12px">Nothing opened? Email <a href="mailto:animusmusictech@gmail.com">animusmusictech@gmail.com</a>
-            yourself: copy your answers and paste them in.</p>
+            yourself: copy your answers, paste them in, and attach the <strong>animus-feedback</strong> .json file from your Downloads folder.</p>
           <div class="actions">
+            <button class="btn primary" type="button" id="download-file" hidden>Download .json file again</button>
             <button class="btn" type="button" id="copy-answers">Copy my answers</button>
             <a class="btn ghost" id="open-again" href="mailto:animusmusictech@gmail.com">Open the email again</a>
           </div>
