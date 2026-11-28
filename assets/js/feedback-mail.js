@@ -35,6 +35,15 @@
            count((capture.events || []).length, "message") + (c.answeredInquiry ? ", and it said who it is" : "") + ".";
   }
 
+  function attachBanner(fileName, capture) {
+    return [
+      "*** REMEMBER TO ATTACH FILE BEFORE SENDING ***",
+      "Add the file starting with \"animus-feedback\" from your Downloads folder:",
+      "-> " + fileName + (capture ? " (answers + controller capture)" : " (full answers)"),
+      "----------------------------------------"
+    ].join("\n");
+  }
+
   // At most max characters, ended at a word.
   function cut(text, max) {
     if (text.length <= max) return text;
@@ -43,11 +52,12 @@
 
   // The email's text. textMax: how much of each long answer goes in. fileName: the file to attach, or "" for none.
   function bodyText(answers, capture, fileName, textMax) {
-    var out = ["Animus feedback", ""];
+    var out = [];
+    if (fileName) out.push(attachBanner(fileName, capture), "");
+    out.push("Animus feedback", "");
     LINES.forEach(function (l) { if (answers[l[0]]) out.push(l[1] + ": " + answers[l[0]]); });
     TEXTS.forEach(function (t) { if (answers[t[0]]) out.push("", t[1], cut(answers[t[0]], textMax)); });
     if (capture) out.push("", captureLine(capture));
-    if (fileName) out.push("", "Attached: " + fileName + " (all of this in full" + (capture ? ", and the controller capture" : "") + ")");
     return out.join("\n");
   }
 
@@ -70,7 +80,11 @@
       var mid = (lo + hi) >> 1, body = bodyText(answers, capture, opts.fileName, mid);
       if (mailto(opts.address, subject, body).length <= max) { best = body; lo = mid + 1; } else hi = mid - 1;
     }
-    if (best === null) best = "Animus feedback\n\nAttached: " + opts.fileName + " (all my answers)";   // even the short answers won't fit
+    if (best === null) {
+      best = attachBanner(opts.fileName, capture) + "\n\nAnimus feedback\n" +
+             (capture ? captureLine(capture) + "\n" : "") +
+             "(Full answers are inside " + opts.fileName + ")";
+    }
     return { url: mailto(opts.address, subject, best), body: best, full: bodyText(answers, capture, opts.fileName, Infinity),
              needsFile: true };
   }
